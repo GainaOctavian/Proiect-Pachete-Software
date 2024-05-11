@@ -8,7 +8,8 @@ import numpy as np
 
 if __name__ == "__main__":
     # read the dataset from resurse folder
-    t = pd.read_csv('../resurse/unemployment.csv', sep=',', header=0)
+    t = pd.read_csv('../resurse/unemployment.csv',
+                    sep=',', header=0)
     # replace NaN values in the dataset
     nan_replace_t(t)
 
@@ -37,4 +38,5 @@ if __name__ == "__main__":
     apply_ml(t)
 
     # print the first 5 rows of the dataset
-    # print(t.head())
+    print("\nFirst 5 rows of the dataset:")
+    print(t.head())

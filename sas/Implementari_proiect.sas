@@ -68,5 +68,3 @@ PROC MEANS DATA=unemployment MEAN SUM;
     VAR 'Age 16-19'n 'Age 20-24'n 'Age 25-34'n 'Age 35-44'n 'Age 45-54'n 'Age 55-64'n 'Age 65+'n;
     CLASS Date;
 RUN;
-
-/* Alte operațiuni pot fi adăugate în funcție de cerințele specifice */
