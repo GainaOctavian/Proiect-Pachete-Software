@@ -1,42 +1,55 @@
 '''
-Main pyhton file for the project
+Main python file for the project
 '''
-# import the functions from the functions file
+# Importați funcțiile din fișierul functions
 from functions import *
 import pandas as pd
 import numpy as np
 
 if __name__ == "__main__":
-    # read the dataset from resurse folder
-    t = pd.read_csv('../resurse/unemployment.csv',
-                    sep=',', header=0)
-    # replace NaN values in the dataset
+    # Citirea setului de date din folderul resurse
+    t = pd.read_csv('../resurse/netflix.csv', sep=',', header=0)
+
+    # Înlocuirea valorilor NaN în setul de date cu medii pentru a menține
+    # integritatea datelor și pentru a facilita analiza ulterioară
     nan_replace_t(t)
 
-    # treat outliers in the dataset
+    # Tratarea valorilor extreme în setul de date pentru a elimina potențialele
+    # distorsiuni și pentru a obține rezultate mai precise în analiză
     treat_outliers(t)
 
-    # define lists and dictionaries for the dataset
+    # Definirea listelor și dicționarelor pentru setul de date, care
+    # furnizează o structură clară și ușor de gestionat a datelor
+    # pentru analiză
     num_cols, cat_cols, num_dict, cat_dict = define_lists(t)
 
-    # specific methods for lists and dictionaries
+    # Aplicarea unor metode specifice pentru liste și dicționare pentru a
+    # obține informații utile despre structura și conținutul setului de date
     list_methods(t)
 
-    # define a set of tuples
+    # Definirea unui set de tupluri pentru a reprezenta și analiza relații
+    # între perechi de date
     tuples = set_tuple(t)
 
-    # specific methods for sets of tuples
+    # Aplicarea metodelor specifice pentru seturi de tupluri pentru a
+    # identifica corelații și tendințe relevante în datele furnizate
     set_tuple_methods(tuples, t)
 
-    # calculate statistics for the dataset
+    # Calcularea statisticilor pentru setul de date, inclusiv medii, mediane
+    # și corelații, pentru a oferi o înțelegere mai profundă a distribuției
+    # și relațiilor din setul de date
     calculate_stats(t)
 
-    # generate plots for the dataset
+    # Generarea graficelor pentru setul de date pentru a vizualiza și
+    # interpreta mai ușor datele, evidențiind modele și tendințe
     generate_plots(t)
 
-    # apply machine learning algorithms to the dataset
+    # Aplicarea algoritmilor de învățare automată pentru a identifica posibile
+    # modele sau tendințe care să sugereze oportunități de extindere sau
+    # îmbunătățire a serviciilor Netflix
     apply_ml(t)
 
-    # print the first 5 rows of the dataset
-    print("\nFirst 5 rows of the dataset:")
+    # Afișarea primelor 5 rânduri ale setului de date pentru a oferi o privire
+    # de ansamblu asupra datelor analizate
+    print("\nPrimele 5 rânduri ale setului de date:")
     print(t.head())

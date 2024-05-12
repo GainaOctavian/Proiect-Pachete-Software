@@ -1,70 +1,45 @@
 /* Definirea fisierului CSV si importarea datelor */
-FILENAME CSV "/home/u63853491/unemployment.csv" TERMSTR=CRLF;
+FILENAME netflix "/home/u63853491/netflix.csv" TERMSTR=CRLF;
 
-PROC IMPORT DATAFILE=CSV OUT=unemployment DBMS=CSV REPLACE;
+/* Definirea variabilelor din dataset */
+DATA netflix_data;
+   INFILE netflix DLM=',' FIRSTOBS=2; /* Specificați delimiterul ca fiind virgulă și ignorăm prima linie care conține doar numele coloanelor */
+   INPUT Date :DDMMYY10. Global_Revenue UCAN_Streaming_Revenue EMEA_Streaming_Revenue LATM_Streaming_Revenue APAC_Streaming_Revenue UCAN_Members EMEA_Members LATM_Members APAC_Members Netflix_Streaming_Memberships;
+   FORMAT Date DDMMYY10.; /* Specificați formatul pentru variabila de tip dată */
 RUN;
 
-/* Setarea de opțiuni */
-OPTIONS MPRINT MLOGIC SYMBOLGEN;
-
-/* Afisarea primelor 5 observații din setul de date */
-PROC PRINT DATA=unemployment(OBS=5);
+/* Verificarea importului datelor */
+PROC PRINT DATA=netflix_data;
 RUN;
 
-/* Crearea și folosirea de formate definite de utilizator pentru afișarea luni în limba română */
-PROC FORMAT;
-    VALUE $MonthFormat
-        'January' = 'Ianuarie'
-        'February' = 'Februarie'
-        'March' = 'Martie'
-        'April' = 'Aprilie'
-        'May' = 'Mai'
-        'June' = 'Iunie'
-        'July' = 'Iulie'
-        'August' = 'August'
-        'September' = 'Septembrie'
-        'October' = 'Octombrie'
-        'November' = 'Noiembrie'
-        'December' = 'Decembrie';
+/* Calcularea sumelor și mediilor pentru veniturile globale și veniturile din diferite regiuni */
+/* Util în identificarea performanței financiare și a distribuției geografice a veniturilor */
+PROC MEANS DATA=netflix_data SUM MEAN;
+   VAR Global_Revenue UCAN_Streaming_Revenue EMEA_Streaming_Revenue LATM_Streaming_Revenue APAC_Streaming_Revenue;
 RUN;
 
-/* Crearea unui subset de date pentru State = 'California' */
-DATA unemployment_california;
-    SET unemployment;
-    WHERE 'Area Name'n = 'California';
+/* Analiza evoluției numărului de membri din diferite regiuni */
+/* Util pentru a identifica tendințele în adopția serviciului în diferite piețe geografice */
+PROC SGSCATTER DATA=netflix_data;
+   PLOT UCAN_Members*Date EMEA_Members*Date LATM_Members*Date APAC_Members*Date;
 RUN;
 
-/* Afisarea primelor 5 observații din subsetul de date pentru California */
-PROC PRINT DATA=unemployment_california(OBS=5);
-    FORMAT Date DATE9.;
+/* Analiza trendurilor în ceea ce privește numărul total de abonamente la serviciul de streaming Netflix */
+/* Util în evaluarea creșterii sau scăderii abonamentelor și identificarea factorilor care contribuie la acestea */
+PROC SGPLOT DATA=netflix_data;
+   SERIES x=Date y=Netflix_Streaming_Memberships / MARKERS;
+   XAXIS LABEL="Date";
+   YAXIS LABEL="Netflix Streaming Memberships";
 RUN;
 
-/* Utilizarea de funcții SAS pentru calculul mediei șomajului pe grupe de vârstă */
-DATA unemployment_summary;
-    SET unemployment;
-    Total_Unemployment_Rate = sum(of 'Age 16-19'n 'Age 20-24'n 'Age 25-34'n 'Age 35-44'n 'Age 45-54'n 'Age 55-64'n 'Age 65+'n);
-    Total_Age_Groups = n(of 'Age 16-19'n 'Age 20-24'n 'Age 25-34'n 'Age 35-44'n 'Age 45-54'n 'Age 55-64'n 'Age 65+'n);
-    Mean_Unemployment_Rate = Total_Unemployment_Rate / Total_Age_Groups;
+/* Analiza distribuțiilor */
+/* Util în înțelegerea distribuției variabilelor cheie și a posibilelor discrepanțe între regiuni */
+PROC UNIVARIATE DATA=netflix_data;
+   VAR Global_Revenue UCAN_Streaming_Revenue EMEA_Streaming_Revenue LATM_Streaming_Revenue APAC_Streaming_Revenue UCAN_Members EMEA_Members LATM_Members APAC_Members Netflix_Streaming_Memberships;
 RUN;
 
-/* Afisarea primelor 5 observații din setul de date sumarizat */
-PROC PRINT DATA=unemployment_summary(OBS=5);
-    VAR Total_Unemployment_Rate Total_Age_Groups Mean_Unemployment_Rate;
-RUN;
-
-/* Generarea de grafice pentru rata medie a șomajului */
-PROC SGSCATTER DATA=unemployment_summary;
-    PLOT Mean_Unemployment_Rate*Total_Age_Groups;
-RUN;
-
-/* Crearea unui subset de date pentru luna Mai */
-DATA unemployment_may;
-    SET unemployment;
-    WHERE Date = '01MAY2008'd;
-RUN;
-
-/* Generarea unui raport pentru statistici sumarizate pe luni */
-PROC MEANS DATA=unemployment MEAN SUM;
-    VAR 'Age 16-19'n 'Age 20-24'n 'Age 25-34'n 'Age 35-44'n 'Age 45-54'n 'Age 55-64'n 'Age 65+'n;
-    CLASS Date;
+/* Calcularea matricei de corelații */
+/* Util în identificarea relațiilor între diferite variabile și în dezvoltarea strategiilor de extindere */
+PROC CORR DATA=netflix_data;
+   VAR Global_Revenue UCAN_Streaming_Revenue EMEA_Streaming_Revenue LATM_Streaming_Revenue APAC_Streaming_Revenue UCAN_Members EMEA_Members LATM_Members APAC_Members Netflix_Streaming_Memberships;
 RUN;
