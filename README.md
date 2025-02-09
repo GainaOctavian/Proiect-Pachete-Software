@@ -1,7 +1,7 @@
 
 # Software Packages Project - Python & SAS
 
-**Bachelor's Project by Aurelian-Octavian Găină**  
+**Project by Aurelian-Octavian Găină**  
 *Faculty of Mathematics and Computer Science, University of Bucharest*  
 Course: Software Packages
 
