@@ -20,7 +20,7 @@ This project integrates Python and SAS to perform data analysis, preprocessing, 
 ## 📂 Project Structure
 
 ```
-Proiect-Pachete-Software/
+Software-Packages-Project/
 ├── python/
 │   ├── main.py              # Main script for data processing and ML tasks
 │   └── functions.py         # Functions for data handling and analysis
